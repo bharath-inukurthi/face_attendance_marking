@@ -2,18 +2,6 @@
 
 This repository contains scripts for face-based attendance marking using either a system camera or an ESP32 web camera. It also includes the necessary requirements and Arduino code for ESP32 setup.
 
-## 📂 Project Structure
-```
-face_attendance_marking/
-├── requirements.txt
-├── requirements/
-│   ├── cmake.exe
-│   └── dlib/
-├── system_camera.py         # Python script for system camera input
-├── esp32_camera.py          # Python script for ESP32 web camera input
-└── esp32_arduino.ino       # Arduino code for ESP32 WiFi camera setup
-```
-
 ## 🛠️ Requirements
 - Python 3.9 or later
 - CMake
@@ -22,6 +10,10 @@ face_attendance_marking/
 
 ### 1️⃣ Install Python Dependencies
 First, install the necessary Python libraries from `requirements.txt`:
+
+```bash
+cd face_attendance_marking
+```
 ```bash
 pip install -r requirements.txt
 ```
@@ -36,31 +28,34 @@ CMake is required for building dlib. You can find `cmake.exe` in the `requiremen
   ```
 
 ### 3️⃣ Install dlib
-Make sure to install `dlib` from the provided files to ensure compatibility:
+Make sure to install `dlib` from the provided files to ensure compatibility between your python version:
 ```bash
-pip install dlib --no-cache-dir --find-links=requirements/dlib/
+pip install "your_compatible_version_file_path"
 ```
+
+## 📡 ESP32 Arduino Setup
+Upload the provided `Wificam.ino` to your ESP32 board using Arduino IDE:
+1. Select **Board:** ESP32 AI thinker Module.
+2. Set the **Upload Speed:** 115200.
+3. Configure your **WiFi credentials** in the `.ino` file.
+ ```bash
+static const char* WIFI_SSID = "your_wifi_user_name";
+static const char* WIFI_PASS = "your_wifi_password";
+```
+6. Upload the code and check the serial monitor for the streaming URL.
 
 ## 🚀 Usage
 ### 1️⃣ Using System Camera
 Run the script to capture attendance from the system camera:
 ```bash
-python system_camera.py
+python scripts/sys_cam.py
 ```
 
 ### 2️⃣ Using ESP32 Web Camera
-Make sure the ESP32 is set up and connected to WiFi. Then run:
+Make sure the ESP32 is set up and connected to WiFi. Then replace url value in [link](scripts/esp_32_cam.py) :
 ```bash
-python esp32_camera.py --url http://<esp32-ip>:81/stream
+url = 'http://<replace_with_ESP32_IP_Address>:81/stream'
 ```
-Replace `<esp32-ip>` with your ESP32's IP address.
-
-## 📡 ESP32 Arduino Setup
-Upload the provided `esp32_arduino.ino` to your ESP32 board using Arduino IDE:
-1. Select **Board:** ESP32 Wrover Module.
-2. Set the **Upload Speed:** 921600.
-3. Configure your **WiFi credentials** in the `.ino` file.
-4. Upload the code and check the serial monitor for the streaming URL.
 
 ## 💡 Notes
 - Ensure your firewall allows access to the ESP32 camera feed.
