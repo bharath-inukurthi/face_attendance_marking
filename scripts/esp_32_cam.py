@@ -30,7 +30,7 @@ def findEncodings(images):
     return encodeList
 
 def markAttendance(name):
-    file=pd.read_csv("C:/Users/inuku/Downloads/IOT_projects/ATTENDANCE/Attendance.csv")
+    file=pd.read_csv(os.path.join(curr_path,"Attendance.csv"))
     if name not in list(file.name):
         now = datetime.now()
         dtString = now.strftime('%H:%M:%S')
@@ -40,16 +40,13 @@ def markAttendance(name):
         file = pd.concat([file, entry], ignore_index=True, axis=0)
         if "Unnamed: 0" in file.columns:
             file.drop(['Unnamed: 0'], inplace=True, axis=1)
-        file.to_csv("C:/Users/inuku/Downloads/ATTENDANCE/Attendance.csv")
+        file.to_csv(os.path.join(curr_path,"Attendance.csv"))
 encodeListKnown = findEncodings(images)
 print('Encoding Complete')
-#uncomment below line to make system camera as input
-#cap = cv2.VideoCapture(0)
+
 
 while True:
-    # uncomment below line to make system camera as input
 
-    #   success, img = cap.read()
     img_resp = urllib.request.urlopen(url)
     imgnp = np.array(bytearray(img_resp.read()), dtype=np.uint8)
     img = cv2.imdecode(imgnp, -1)
