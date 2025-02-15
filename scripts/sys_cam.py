@@ -6,18 +6,19 @@ from datetime import datetime
 import face_recognition
 
 curr_path=os.getcwd()
-path = os.path.join(curr_path,"image_folder")
+root_path=os.path.dirname(curr_path)
+path = os.path.join(root_path,"image_folder")
 
 
 images = []
-classNames = []
+st_roll_no = []
 myList = os.listdir(path)
 print(myList)
 for cl in myList:
     curImg = cv2.imread(f'{path}/{cl}')
     images.append(curImg)
-    classNames.append(os.path.splitext(cl)[0])
-print(classNames)
+    st_roll_no.append(int(os.path.splitext(cl)[0]))
+print(st_roll_no)
 
 def findEncodings(images):
     encodeList = []
@@ -27,18 +28,18 @@ def findEncodings(images):
         encodeList.append(encode)
     return encodeList
 
-def markAttendance(name):
-    file=pd.read_csv(os.path.join(curr_path,"Attendance.csv"))
-    if name not in list(file.name):
+def markAttendance(roll_no):
+    file=pd.read_csv(os.path.join(root_path,"Attendance.csv"))
+    if roll_no not in list(map(int,file.roll_no)):
         now = datetime.now()
         dtString = now.strftime('%H:%M:%S')
-        entry = {"name": [f"{name}"],
+        entry = {"roll_no": [f"{roll_no}"],
                  "time": [f"{dtString}"]}
-        entry = pd.DataFrame(entry, columns=["name", "time"])
+        entry = pd.DataFrame(entry, columns=["roll_no", "time"])
         file = pd.concat([file, entry], ignore_index=True, axis=0)
         if "Unnamed: 0" in file.columns:
             file.drop(['Unnamed: 0'], inplace=True, axis=1)
-        file.to_csv(os.path.join(curr_path,"Attendance.csv"))
+        file.to_csv(os.path.join(root_path,"Attendance.csv"))
 encodeListKnown = findEncodings(images)
 print('Encoding Complete')
 
@@ -62,14 +63,14 @@ while True:
         matchIndex = np.argmin(faceDis)
 
         if matches[matchIndex]:
-            name = classNames[matchIndex].upper()
+            roll_no = st_roll_no[matchIndex]
 
             y1, x2, y2, x1 = faceLoc
             y1, x2, y2, x1 = y1 * 4, x2 * 4, y2 * 4, x1 * 4
             cv2.rectangle(img, (x1, y1), (x2, y2), (0, 255, 0), 2)
             cv2.rectangle(img, (x1, y2 - 35), (x2, y2), (0, 255, 0), cv2.FILLED)
-            cv2.putText(img, name, (x1 + 6, y2 - 6), cv2.FONT_HERSHEY_COMPLEX, 1, (255, 255, 255), 2)
-            markAttendance(name)
+            cv2.putText(img, str(roll_no), (x1 + 6, y2 - 6), cv2.FONT_HERSHEY_COMPLEX, 1, (255, 255, 255), 2)
+            markAttendance(roll_no)
 
     cv2.imshow('Cam', img)
     key = cv2.waitKey(5)
