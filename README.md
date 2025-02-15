@@ -33,6 +33,10 @@ Make sure to install `dlib` from the provided files to ensure compatibility betw
 pip install "your_compatible_version_file_path"
 ```
 
+## Demo
+
+[video](https://github.com/user-attachments/assets/4f256c84-b84b-4fbc-bfcb-e2ea50517d6e)
+
 ## 📡 ESP32 Arduino Setup
 Upload the provided `Wificam.ino` to your ESP32 board using Arduino IDE:
 1. Select **Board:** ESP32 AI thinker Module.
