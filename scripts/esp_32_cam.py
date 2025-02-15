@@ -8,7 +8,7 @@ import face_recognition
 
 curr_path=os.getcwd()
 path = os.path.join(curr_path,"image_folder")
-url = 'http://192.168.78.163:81/stream'
+url = 'http://<replace_with_ESP32_IP_Address>:81/stream'
 ##'''cam.bmp / cam-lo.jpg /cam-hi.jpg / cam.mjpeg '''
 
 images = []
